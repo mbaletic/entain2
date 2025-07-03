@@ -393,7 +393,7 @@ namespace entain2
         /// <param name="status">Status values that need to be considered for filter</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<Anonymous> status)
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<PetStatus> status)
         {
             return FindPetsByStatusAsync(status, System.Threading.CancellationToken.None);
         }
@@ -408,7 +408,7 @@ namespace entain2
         /// <param name="status">Status values that need to be considered for filter</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<Anonymous> status, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<PetStatus> status, System.Threading.CancellationToken cancellationToken)
         {
             if (status == null)
                 throw new System.ArgumentNullException("status");
@@ -2261,21 +2261,6 @@ namespace entain2
         /// </summary>
         [Newtonsoft.Json.JsonProperty("userStatus", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? UserStatus { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum Anonymous
-    {
-
-        [System.Runtime.Serialization.EnumMember(Value = @"available")]
-        Available = 0,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"pending")]
-        Pending = 1,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"sold")]
-        Sold = 2,
 
     }
 
