@@ -15,18 +15,13 @@ namespace entain2
         public Base()
         {
             httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders
-                .Accept
-                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client = new Client(httpClient);
         }
 
         [AssemblyCleanup]
         public void TearDown()
         {
-
             httpClient.Dispose();
-
         }
 
 

@@ -1,14 +1,13 @@
-﻿
-using entain2.Utils;
+﻿using entain2.Utils;
 
-namespace entain2
+namespace entain2.Tests
 {
     /// <summary>
     /// Contains tests which will:
-    /// Create a testPet and verify its creation
-    /// Update the testPet with new info and verify that the changes have been applied
-    /// Find the testPet from a list of pets
-    /// Delete the testPet
+    /// Create a test pet and verify its creation
+    /// Update the test pet with new info and verify that the changes have been applied
+    /// Find the test pet from a list of pets
+    /// Delete the test pet
     /// </summary>
     [TestClass]
     public sealed class CrudTest : Base
