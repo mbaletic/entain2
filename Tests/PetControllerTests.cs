@@ -13,7 +13,7 @@ namespace entain2.Tests
     /// Find pets by all 3 statuses
     /// </summary>
     [TestClass]
-    public sealed class CrudTest : Base
+    public sealed class PetControllerTests : Base
     {
 
         [TestMethod]
@@ -120,6 +120,12 @@ namespace entain2.Tests
                 Assert.IsTrue(pet.Status == PetStatus.Sold,
                     $"There is a pet with wrong status - {pet.Status.Value} in the sold pet status list.");
             }
+        }
+        [TestMethod]
+        public async Task FindByTags()
+        {
+            var response = await client.FindPetsByTagsAsync(new List<string> { "test" });
+            Assert.IsNotNull(response, "Find by tags operation returned nothing.");
         }
 
     }
