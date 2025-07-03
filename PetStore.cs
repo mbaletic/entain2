@@ -39,7 +39,8 @@ namespace entain2
         public Client(System.Net.Http.HttpClient httpClient)
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
-            BaseUrl = "https://petstore.swagger.io/v2";
+            
+            BaseUrl = "http://localhost:8080/api";
             _httpClient = httpClient;
             Initialize();
         }
@@ -2168,7 +2169,7 @@ namespace entain2
     public partial class Pet
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long? Id { get; set; }
+        public long Id { get; set; }
 
         [Newtonsoft.Json.JsonProperty("category", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public Category Category { get; set; }
