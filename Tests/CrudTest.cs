@@ -68,7 +68,11 @@ namespace entain2.Tests
             availablePets = await client.FindPetsByStatusAsync(new List<PetStatus>{ PetStatus.Available});
 
             Assert.IsNotNull(availablePets.Count(), "There are no available pets.");
-
+            foreach(var pet in availablePets)
+            {
+                Assert.IsTrue(pet.Status == PetStatus.Available, 
+                    $"There is a pet with wrong status - {pet.Status.Value} in the available pet status list.");
+            }
         }
 
         [TestMethod]
@@ -78,16 +82,26 @@ namespace entain2.Tests
             pendingPets = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Pending });
 
             Assert.IsNotNull(pendingPets.Count(), "There are no pending pets.");
+            foreach (var pet in pendingPets)
+            {
+                Assert.IsTrue(pet.Status == PetStatus.Pending,
+                    $"There is a pet with wrong status - {pet.Status.Value} in the pending pet status list.");
+            }
 
         }
 
         [TestMethod]
         public async Task CheckIfThereAreSoldPets()
         {
-            IEnumerable<Pet> pendingPets;
-            pendingPets = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Sold });
+            IEnumerable<Pet> soldPets;
+            soldPets = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Sold });
 
-            Assert.IsNotNull(pendingPets.Count(), "There are no sold pets.");
+            Assert.IsNotNull(soldPets.Count(), "There are no sold pets.");
+            foreach (var pet in soldPets)
+            {
+                Assert.IsTrue(pet.Status == PetStatus.Sold,
+                    $"There is a pet with wrong status - {pet.Status.Value} in the sold pet status list.");
+            }
 
         }
     }
