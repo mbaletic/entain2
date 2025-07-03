@@ -7,6 +7,7 @@ namespace entain2.Tests
     /// These are core features and must always work.
     /// Contains tests which will:
     /// Create a test pet and verify its creation
+    /// Create a pet and attach an image to it
     /// Create a test pet and delete it, verify that it's deleted
     /// Create, update the test pet with new info and verify that the changes have been applied
     /// Find pets by all 3 statuses
@@ -19,6 +20,7 @@ namespace entain2.Tests
         public async Task CreatePet()
         {
             Pet localPet = PetGenerator.CreateValidPet();
+            localPet.Status = PetStatus.Available;
 
             await client.AddPetAsync(localPet);
 
@@ -59,6 +61,22 @@ namespace entain2.Tests
             var updatedPet = await client.GetPetByIdAsync(localPet.Id);
             Assert.IsTrue(localPet.Name == updatedPet.Name, "Name of the remote pet didn't update after patching it's name.");
             
+        }
+        [TestMethod]
+        public async Task CreatePetAndAttachImage()
+        {
+            var imagePath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "shiba.jpg");
+            var fileStream = File.OpenRead(imagePath);
+            var file = new FileParameter(fileStream, "shiba.jpg", "image/jpeg");
+
+            Pet localPet = PetGenerator.CreateValidPet();
+            await client.AddPetAsync(localPet);
+
+            await client.UploadFileAsync(localPet.Id, "photo", file);
+
+            var remotePet = await client.GetPetByIdAsync(localPet.Id);
+            fileStream.Close();
+            Assert.IsNotNull(remotePet.PhotoUrls);
         }
 
         [TestMethod]
@@ -102,8 +120,8 @@ namespace entain2.Tests
                 Assert.IsTrue(pet.Status == PetStatus.Sold,
                     $"There is a pet with wrong status - {pet.Status.Value} in the sold pet status list.");
             }
-
         }
+
     }
 
 
