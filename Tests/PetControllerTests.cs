@@ -60,7 +60,7 @@ namespace entain2.Tests
 
             var updatedPet = await client.GetPetByIdAsync(localPet.Id);
             Assert.IsTrue(localPet.Name == updatedPet.Name, "Name of the remote pet didn't update after patching it's name.");
-            
+
         }
         [TestMethod]
         public async Task CreatePetAndAttachImage()
@@ -83,12 +83,12 @@ namespace entain2.Tests
         public async Task CheckIfThereAreAvailablePets()
         {
             IEnumerable<Pet> availablePets;
-            availablePets = await client.FindPetsByStatusAsync(new List<PetStatus>{ PetStatus.Available});
+            availablePets = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available });
 
             Assert.IsNotNull(availablePets.Count(), "There are no available pets.");
-            foreach(var pet in availablePets)
+            foreach (var pet in availablePets)
             {
-                Assert.IsTrue(pet.Status == PetStatus.Available, 
+                Assert.IsTrue(pet.Status == PetStatus.Available,
                     $"There is a pet with wrong status - {pet.Status.Value} in the available pet status list.");
             }
         }
@@ -121,6 +121,7 @@ namespace entain2.Tests
                     $"There is a pet with wrong status - {pet.Status.Value} in the sold pet status list.");
             }
         }
+
         [TestMethod]
         public async Task FindByTags()
         {

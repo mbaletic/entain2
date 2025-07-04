@@ -28,8 +28,9 @@ namespace entain2.Utils
         public static Pet CreateValidPet()
         {
             Pet pet = new Pet();
-            pet.Id = random.Next();
+            pet.Id = random.Next(1000);
             pet.Name = GenerateName();
+            pet.Status = (PetStatus)random.Next(0, 2);
             generatedPetIds.Add(pet.Id);
             return pet;
         }
