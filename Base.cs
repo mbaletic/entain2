@@ -25,24 +25,27 @@ namespace entain2
             Logger.Log($"Start of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}");
         }
 
-
-        [AssemblyCleanup]
-        public static async Task Teardown()
+        [TestCleanup]
+        public async Task TestTeardown()
         {
-
-            foreach (var testPetId in PetGenerator.generatedPetIds)
+            foreach (var petId in PetGenerator.generatedPetIds)
             {
                 try
                 {
-                    await client.DeletePetAsync("", testPetId);
-                    Logger.Log($"Deleted {testPetId}.");
+                    await client.DeletePetAsync("", petId);
+                    Logger.Log($"Deleted pet {petId}.");
                 }
                 catch (ApiException e)
                 {
-                    // Because in one method we already deleted the pet!
-                    Logger.Log($"Failed to delete pet {testPetId} - {e.Message}");
+                    Logger.Log($"Could not delete pet {petId}: {e.Message}");
                 }
             }
+            PetGenerator.generatedPetIds.Clear();
+        }
+
+        [AssemblyCleanup]
+        public static async Task SuiteTeardown()
+        {
             var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
             Logger.Log($"End of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}");
             httpClient.Dispose();
