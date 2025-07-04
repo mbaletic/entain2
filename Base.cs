@@ -22,6 +22,7 @@ namespace entain2
         {
             httpClient = new HttpClient();
             client = new Client(httpClient);
+            client.BaseUrl = ConfigManager.Settings.BaseUrl;
             var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
             Logger.Log($"Start of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}");
         }
