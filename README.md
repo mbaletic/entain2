@@ -2,53 +2,71 @@
 
 ## Overview
 
-This project contains automated integration tests for the Pet Store API. It uses MSTest for running tests, a custom Client for API calls, and includes logging and configuration management.
+This project provides automated integration tests for the Pet Store API using MSTest and a custom Client.
+It includes configuration via appsettings.json and logging of test execution.
 
 ## Project Structure
 
-- Base.cs - Base test class handling setup, teardown, and shared HttpClient.
-- PetControllerTests.cs - Positive tests covering core Pet Store features.
-- PetControllerNegativeTests.cs - Negative tests for invalid scenarios.
-- ConfigManager.cs - Loads config from appsettings.json.
-- Logger.cs - Logs test details to files and MSTest TestContext.
-- PetGenerator.cs - Generates pet data for tests.
-- RawJsonClient.cs - Sends raw JSON requests to API.
+- Base.cs — shared test setup, teardown, HttpClient instance
+- PetControllerTests.cs — positive tests for creating, updating, deleting, and querying pets
+- PetControllerNegativeTests.cs — negative tests for invalid requests and missing fields
+- ConfigManager.cs — reads appsettings.json for BaseUrl (and optional settings)
+- Logger.cs — writes logs to Logs folder and MSTest TestContext output
+- PetGenerator.cs — generates test pet objects
+- RawJsonClient.cs — sends raw JSON HTTP requests
+- pullDockerAndRunTests.ps1 — PowerShell script to start Docker, run tests, and stop container
 
 ## Configuration
 
-Use appsettings.json to set:
+Place an appsettings.json next to your test project .csproj with at least:
 
-json / { / "BaseUrl": "http://localhost:8080/api", / "TimeoutSeconds": 30, / "Environment": "local" / } /
+json / { / "BaseUrl": "http://localhost:8080/api" / } /
 
-Only BaseUrl is mandatory.
+Optionally add TimeoutSeconds and Environment keys with defaults in code.
 
-## Running Tests
+## Running Tests on Windows
 
-1. Start the Pet Store API with Docker:
+### Prerequisite
+- Docker Desktop
+- .NET SDK 8.0+
 
-bash / docker run -d -p 8080:8080 swaggerapi/petstore /
+### Manual steps
+
+1. Open PowerShell and run the Pet Store API container:
+
+powershell / docker run -d -p 8080:8080 swaggerapi/petstore /
 
 2. Run tests:
 
-bash / dotnet test /
+powershell / dotnet test /
 
-3. Stop the Docker container:
+3. Stop and remove the container:
 
-bash / docker stop <container_id> / docker rm <container_id> /
+powershell / docker stop <container_id> / docker rm <container_id> /
 
-You can also use the provided pullDockerAndRunTests.ps1 script to automate starting Docker, running tests, and stopping the container.
+### Automated via script
+
+Run pullDockerAndRunTests.ps1 in PowerShell:
+
+powershell / .\pullDockerAndRunTests.ps1 /
+
+This script pulls the Docker image, starts the container, runs dotnet test,
+then stops and removes the container automatically.
 
 ## Logging
 
-Logs are saved in a Logs folder with timestamps and also output to MSTest TestContext.
+Logs are saved under Logs\ with timestamps and echoed to MSTest test output.
 
-## Approach and Notes
+## Approach
 
-Tests cover both positive and negative cases for the Pet Store API.
-Configuration loads once per test run using lazy initialization.
-Created test pets are cleaned up after each test.
+- Configuration is loaded once per run via ConfigManager.
+- Tests cover positive and negative scenarios for all Pet endpoints.
+- Each test creates its own data via PetGenerator and cleans up after itself.
 
-Future plans include adding tests for all API methods, both positive and negative, and expanding coverage to other controllers like orders, users, authentication, and login.
+## Future Work
+
+- Expand tests to cover every API method, including orders, users, authentication, and login.
+- Add data-driven tests for different input combinations.
 
 ---
 
