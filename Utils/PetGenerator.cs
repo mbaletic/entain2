@@ -31,6 +31,7 @@ namespace entain2.Utils
             pet.Id = random.Next(1000);
             pet.Name = GenerateName();
             pet.Status = (PetStatus)random.Next(0, 2);
+            pet.PhotoUrls = new List<string>();
             generatedPetIds.Add(pet.Id);
             return pet;
         }
