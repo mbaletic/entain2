@@ -8,6 +8,8 @@ namespace entain2.Tests
     /// Using raw JSON requests by omitting required parameters
     /// </summary>
     [TestClass]
+    [TestCategory("Regression")]
+    [TestCategory("Negative")]
     public sealed class PetControllerNegativeTests : Base
     {
         [TestMethod]
@@ -30,6 +32,7 @@ namespace entain2.Tests
         /// Probably bad implementation service-side
         /// </summary>
         [TestMethod]
+        [TestCategory("Bugs")]
         public async Task CreatePetWithoutName()
         {
             var petId = 566678;
@@ -59,6 +62,7 @@ namespace entain2.Tests
         /// </summary>
 
         [TestMethod]
+        [TestCategory("Bugs")]
         public async Task CreatePetWithoutPhotoUrls()
         {
             var petWithoutPhotoUrls = @"{
@@ -83,6 +87,7 @@ namespace entain2.Tests
         /// {"id":13,"photoUrls":[],"tags":[]}
         /// </summary>
         [TestMethod]
+        [TestCategory("Bugs")]
         public async Task TryCreatePetWithEmptyRequestBody()
         {
             var emptyBody = @"{

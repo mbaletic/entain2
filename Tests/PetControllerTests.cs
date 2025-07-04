@@ -13,9 +13,10 @@ namespace entain2.Tests
     /// Find pets by all 3 statuses
     /// </summary>
     [TestClass]
+    [TestCategory("Regression")]
+    [TestCategory("Positive")]
     public sealed class PetControllerTests : Base
     {
-
         [TestMethod]
         public async Task CreatePet()
         {
