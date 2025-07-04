@@ -13,6 +13,7 @@ namespace entain2.Utils
     {
         private static string logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
         private static string logFilePath;
+        public static TestContext TestContext { get; set; }
 
         static Logger()
         {
@@ -29,6 +30,10 @@ namespace entain2.Utils
         {
             string entry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
             File.AppendAllText(logFilePath, entry + Environment.NewLine);
+            if (TestContext != null)
+            {
+                TestContext.WriteLine(entry);
+            }
         }
     }
 }

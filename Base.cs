@@ -15,6 +15,7 @@ namespace entain2
     {
         public static HttpClient httpClient;
         public static Client client;
+        public TestContext TestContext { get; set; }
 
         [AssemblyInitialize]
         public static async Task Setup(TestContext context)
@@ -23,6 +24,13 @@ namespace entain2
             client = new Client(httpClient);
             var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
             Logger.Log($"Start of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}");
+        }
+
+        [TestInitialize]
+        public void TestSetup()
+        {
+            Logger.TestContext = TestContext;
+            Logger.Log($"Starting test: {TestContext.TestName}");
         }
 
         [TestCleanup]
@@ -41,6 +49,7 @@ namespace entain2
                 }
             }
             PetGenerator.generatedPetIds.Clear();
+            Logger.Log($"Ending test: {TestContext.TestName}");
         }
 
         [AssemblyCleanup]
