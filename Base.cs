@@ -11,11 +11,11 @@ namespace entain2
     [TestClass]
     public class Base
     {
-        protected HttpClient httpClient;
-        protected Client client;
+        public static HttpClient httpClient;
+        public static Client client;
 
-        [TestInitialize]
-        public void Setup()
+        [AssemblyInitialize]
+        public static void Setup(TestContext context)
         {
             httpClient = new HttpClient();
             client = new Client(httpClient);
@@ -25,8 +25,6 @@ namespace entain2
         [AssemblyCleanup]
         public static async Task Teardown()
         {
-            var httpClient = new HttpClient();
-            var client = new Client(httpClient);
 
             foreach (var testPetId in PetGenerator.generatedPetIds)
             {
