@@ -8,6 +8,7 @@ namespace entain2.Utils
 {
     public static class PetGenerator
     {
+        public static List<long> generatedPetIds = new List<long>();
         static Random random = new Random();
         public static string GenerateName()
         {
@@ -29,6 +30,7 @@ namespace entain2.Utils
             Pet pet = new Pet();
             pet.Id = random.Next();
             pet.Name = GenerateName();
+            generatedPetIds.Add(pet.Id);
             return pet;
         }
     }
