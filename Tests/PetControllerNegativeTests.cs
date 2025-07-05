@@ -46,7 +46,7 @@ namespace entain2.Tests
 
 
             var response = await RawJsonClient.PostPetAsync(petWithoutNameRequest);
-            await client.DeletePetAsync("", petId);
+            await client.DeletePetAsync(ConfigManager.Settings.ApiKey, petId);
 
 
             Assert.Fail("Service allowed creating a pet without name being present in the request body.");
@@ -94,7 +94,7 @@ namespace entain2.Tests
         }";
 
             var response = await RawJsonClient.PostPetAsync(emptyBody);
-            await client.DeletePetAsync("", response.Content.ReadFromJsonAsync<Pet>().Result.Id);
+            await client.DeletePetAsync(ConfigManager.Settings.ApiKey, response.Content.ReadFromJsonAsync<Pet>().Result.Id);
             Assert.IsTrue((int)response.StatusCode != 200, "Endpoint allows empty request body");
 
 

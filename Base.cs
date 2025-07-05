@@ -41,7 +41,7 @@ namespace entain2
             {
                 try
                 {
-                    await client.DeletePetAsync("", petId);
+                    await client.DeletePetAsync(ConfigManager.Settings.ApiKey, petId);
                     Logger.Log($"Deleted pet {petId}.");
                 }
                 catch (ApiException e)

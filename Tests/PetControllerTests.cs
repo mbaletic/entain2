@@ -47,7 +47,7 @@ namespace entain2.Tests
 
             await client.AddPetAsync(localPet);
 
-            await client.DeletePetAsync("", localPet.Id);
+            await client.DeletePetAsync(ConfigManager.Settings.ApiKey, localPet.Id);
         }
 
         [TestMethod]
