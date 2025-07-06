@@ -35,21 +35,12 @@ namespace entain2.Tests
         [TestCategory("Bugs")]
         public async Task CreatePetWithoutName()
         {
-            var petId = 566678;
-            var petWithoutNameRequest = @"{
-        ""id"": 566678,
-        ""photoUrls"": [""""],
-        ""status"": ""available""
-    }";
+            Pet petWithoutNameRequest = PetGenerator.CreateValidPet();
+            petWithoutNameRequest.Name = null;
 
-            PetGenerator.generatedPetIds.Add(petId);
-
-
-            var response = await RawJsonClient.PostPetAsync(petWithoutNameRequest);
-
+            await client.AddPetAsync(petWithoutNameRequest);
 
             Assert.Fail("Service allowed creating a pet without name being present in the request body.");
-
         }
 
         /// <summary>
@@ -64,16 +55,12 @@ namespace entain2.Tests
         [TestCategory("Bugs")]
         public async Task CreatePetWithoutPhotoUrls()
         {
-            var petWithoutPhotoUrls = @"{
-            ""id"": 566679,
-            ""name"": ""withoutPhotoUrls"",
-            ""status"": ""available""
-        }";
-
+            Pet petWithoutPhotoUrls = PetGenerator.CreateValidPet();
+            petWithoutPhotoUrls.PhotoUrls = null;
             PetGenerator.generatedPetIds.Add(566679);
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             {
-                await RawJsonClient.PostPetAsync(petWithoutPhotoUrls);
+                await client.AddPetAsync(petWithoutPhotoUrls);
             }, "Service allows creating a pet without photo urls array being present in the request body.");
 
         }
@@ -95,17 +82,24 @@ namespace entain2.Tests
             var response = await RawJsonClient.PostPetAsync(emptyBody);
             PetGenerator.generatedPetIds.Add(response.Content.ReadFromJsonAsync<Pet>().Result.Id);
             Assert.IsTrue((int)response.StatusCode != 200, "Endpoint allows empty request body");
-
-
         }
 
         [TestMethod]
         public async Task TryCreatePetNoBody()
         {
-
             var response = await RawJsonClient.PostPetAsync("");
             Assert.IsTrue((int)response.StatusCode == 405, "Endpoint allows sending no request body");
+        }
 
+        [TestMethod]
+        public async Task TryCreateEmptyPet()
+        {
+            Pet emptyPet = new Pet();
+            await Assert.ThrowsExceptionAsync<ApiException>(async () =>
+            {
+                await client.AddPetAsync(emptyPet);
+            },"Service allows creation of pet with empty pet object fields");
+            
         }
     }
 }

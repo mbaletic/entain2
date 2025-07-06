@@ -20,7 +20,8 @@ namespace entain2
         [AssemblyInitialize]
         public static async Task Setup(TestContext context)
         {
-            httpClient = new HttpClient();
+            var loggingHandler = new LoggingHandler(new HttpClientHandler());
+            httpClient = new HttpClient(loggingHandler);
             client = new Client(httpClient);
             client.BaseUrl = ConfigManager.Settings.BaseUrl;
             var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
