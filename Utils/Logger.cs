@@ -29,10 +29,9 @@ namespace entain2.Utils
         public static void Log(string message, bool logToTxtFileOnly = false)
         {
             string entry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
-            if (TestContext != null && logToTxtFileOnly != true)
+            if (TestContext != null)
             {
                 TestContext.WriteLine(entry);
-                return;
             }
             File.AppendAllText(logFilePath, entry + Environment.NewLine);
         }

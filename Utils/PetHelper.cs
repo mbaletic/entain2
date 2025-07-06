@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace entain2.Utils
 {
-    public static class PetGenerator
+    public static class PetHelper
     {
         public static List<long> generatedPetIds = [];
         static readonly Random random = new();

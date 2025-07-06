@@ -1,7 +1,7 @@
 ﻿using entain2.Utils;
 using System.Net.Http.Json;
 
-namespace entain2.Tests
+namespace entain2.Tests.PetController
 {
     /// <summary>
     /// Here we try different negative scenarios
@@ -35,7 +35,7 @@ namespace entain2.Tests
         [TestCategory("Bugs")]
         public async Task CreatePetWithoutName()
         {
-            Pet petWithoutNameRequest = PetGenerator.CreateValidPet();
+            Pet petWithoutNameRequest = PetHelper.CreateValidPet();
             petWithoutNameRequest.Name = null;
 
             await client.AddPetAsync(petWithoutNameRequest);
@@ -55,7 +55,7 @@ namespace entain2.Tests
         [TestCategory("Bugs")]
         public async Task CreatePetWithoutPhotoUrls()
         {
-            Pet petWithoutPhotoUrls = PetGenerator.CreateValidPet();
+            Pet petWithoutPhotoUrls = PetHelper.CreateValidPet();
             petWithoutPhotoUrls.PhotoUrls = null;
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             {
@@ -87,7 +87,7 @@ namespace entain2.Tests
                 return;
             }
 
-            PetGenerator.generatedPetIds.Add(pet.Id);
+            PetHelper.generatedPetIds.Add(pet.Id);
 
             Assert.IsTrue((int)response.StatusCode != 200, "Endpoint allows empty request body");
         }

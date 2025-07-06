@@ -1,6 +1,6 @@
 ﻿using entain2.Utils;
 
-namespace entain2.Tests
+namespace entain2.Tests.PetController
 {
     /// <summary>
     /// Tests written to check if the pet store management system - basic features are working.
@@ -20,7 +20,7 @@ namespace entain2.Tests
         [TestMethod]
         public async Task CreatePet()
         {
-            Pet localPet = PetGenerator.CreateValidPet();
+            Pet localPet = PetHelper.CreateValidPet();
             localPet.Status = PetStatus.Available;
 
             await client.AddPetAsync(localPet);
@@ -30,7 +30,7 @@ namespace entain2.Tests
         [TestMethod]
         public async Task CreatePetAndVerify()
         {
-            Pet localPet = PetGenerator.CreateValidPet();
+            Pet localPet = PetHelper.CreateValidPet();
 
             await client.AddPetAsync(localPet);
 
@@ -43,7 +43,7 @@ namespace entain2.Tests
         [TestMethod]
         public async Task CreatePetAndDelete()
         {
-            Pet localPet = PetGenerator.CreateValidPet();
+            Pet localPet = PetHelper.CreateValidPet();
 
             await client.AddPetAsync(localPet);
 
@@ -53,7 +53,7 @@ namespace entain2.Tests
         [TestMethod]
         public async Task CreatePetAndModify()
         {
-            Pet localPet = PetGenerator.CreateValidPet();
+            Pet localPet = PetHelper.CreateValidPet();
             await client.AddPetAsync(localPet);
 
             localPet.Name = "Updated pet";
@@ -70,7 +70,7 @@ namespace entain2.Tests
             var fileStream = File.OpenRead(imagePath);
             var file = new FileParameter(fileStream, "shiba.jpg", "image/jpeg");
 
-            Pet localPet = PetGenerator.CreateValidPet();
+            Pet localPet = PetHelper.CreateValidPet();
             await client.AddPetAsync(localPet);
 
             await client.UploadFileAsync(localPet.Id, "photo", file);

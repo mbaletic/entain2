@@ -26,8 +26,6 @@ namespace entain2
             {
                 BaseUrl = ConfigManager.Settings.BaseUrl
             };
-            var response = await client.FindPetsByStatusAsync([PetStatus.Available, PetStatus.Sold, PetStatus.Pending]);
-            Logger.Log($"Start of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}", true);
         }
 
         [TestInitialize]
@@ -40,7 +38,7 @@ namespace entain2
         [TestCleanup]
         public async Task TestTeardown()
         {
-            foreach (var petId in PetGenerator.generatedPetIds)
+            foreach (var petId in PetHelper.generatedPetIds)
             {
                 try
                 {
@@ -52,15 +50,13 @@ namespace entain2
                     Logger.Log($"Could not delete pet {petId}: {e.Message}");
                 }
             }
-            PetGenerator.generatedPetIds.Clear();
+            PetHelper.generatedPetIds.Clear();
             Logger.Log($"Ending test: {TestContext.TestName}");
         }
 
         [AssemblyCleanup]
         public static async Task SuiteTeardown()
         {
-            var response = await client.FindPetsByStatusAsync([PetStatus.Available, PetStatus.Sold, PetStatus.Pending]);
-            Logger.Log($"End of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}", true);
             httpClient.Dispose();
         }
     }
