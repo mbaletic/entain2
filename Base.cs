@@ -25,7 +25,7 @@ namespace entain2
             client = new Client(httpClient);
             client.BaseUrl = ConfigManager.Settings.BaseUrl;
             var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
-            Logger.Log($"Start of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}");
+            Logger.Log($"Start of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}", true);
         }
 
         [TestInitialize]
@@ -58,7 +58,7 @@ namespace entain2
         public static async Task SuiteTeardown()
         {
             var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
-            Logger.Log($"End of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}");
+            Logger.Log($"End of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}", true);
             httpClient.Dispose();
         }
     }

@@ -26,14 +26,15 @@ namespace entain2.Utils
             logFilePath = Path.Combine(logsDirectory, fileName);
             Log("Log file created");
         }
-        public static void Log(string message)
+        public static void Log(string message, bool logToTxtFileOnly = false)
         {
             string entry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
-            File.AppendAllText(logFilePath, entry + Environment.NewLine);
-            if (TestContext != null)
+            if (TestContext != null && logToTxtFileOnly != true)
             {
                 TestContext.WriteLine(entry);
+                return;
             }
+            File.AppendAllText(logFilePath, entry + Environment.NewLine);
         }
     }
 }
