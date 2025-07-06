@@ -18,15 +18,23 @@ It includes configuration via `appsettings.json` and logging of test execution.
 
 ## Configuration
 
-Place an `appsettings.json` next to your test project `.csproj` with at least:
+Place an `appsettings.json` file next to your test project `.csproj` with at least:
 
-\`\`\`json
+```json
 {
   "BaseUrl": "http://localhost:8080/api"
 }
-\`\`\`
+```
 
-Optionally add `TimeoutSeconds` and `Environment` keys with defaults in code.
+Optionally add `TimeoutSeconds` and `Environment` keys, for example:
+
+```json
+{
+  "BaseUrl": "http://localhost:8080/api",
+  "TimeoutSeconds": 30,
+  "Environment": "local"
+}
+```
 
 ## Running Tests on Windows
 
@@ -37,28 +45,31 @@ Optionally add `TimeoutSeconds` and `Environment` keys with defaults in code.
 ### Manual steps
 
 1. Open PowerShell and start the Pet Store API:
-   \`\`\`powershell
+
+   ```powershell
    docker run -d -p 8080:8080 swaggerapi/petstore
-   \`\`\`
+   ```
 
 2. Run tests:
-   \`\`\`powershell
+
+   ```powershell
    dotnet test
-   \`\`\`
+   ```
 
 3. Stop and remove the container:
-   \`\`\`powershell
+
+   ```powershell
    docker stop <container_id>
    docker rm <container_id>
-   \`\`\`
+   ```
 
 ### Automated via script
 
-Run:
-\`\`\`powershell
+Run the PowerShell script to pull the image, start the container, run tests, and clean up:
+
+```powershell
 .\pullDockerAndRunTests.ps1
-\`\`\`
-This script pulls the Docker image, starts the container, runs `dotnet test`, then stops and removes the container automatically.
+```
 
 ## Logging
 
