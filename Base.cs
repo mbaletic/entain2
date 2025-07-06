@@ -18,7 +18,7 @@ namespace entain2
         public TestContext TestContext { get; set; }
 
         [AssemblyInitialize]
-        public static async Task Setup(TestContext context)
+        public static void Setup(TestContext context)
         {
             var loggingHandler = new LoggingHandler(new HttpClientHandler());
             httpClient = new HttpClient(loggingHandler);
@@ -55,7 +55,7 @@ namespace entain2
         }
 
         [AssemblyCleanup]
-        public static async Task SuiteTeardown()
+        public static void SuiteTeardown()
         {
             httpClient.Dispose();
         }

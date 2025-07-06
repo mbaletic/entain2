@@ -11,7 +11,7 @@ namespace entain2.Tests.UserController
     public sealed class UserControllerTests : Base
     {
         [TestMethod]
-        public async Task LoginTestUser()
+        public async Task AddNewBalidUser()
         {
             var user = UserHelper.CreateValidUser();
 
