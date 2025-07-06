@@ -57,7 +57,6 @@ namespace entain2.Tests
         {
             Pet petWithoutPhotoUrls = PetGenerator.CreateValidPet();
             petWithoutPhotoUrls.PhotoUrls = null;
-            PetGenerator.generatedPetIds.Add(566679);
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             {
                 await client.AddPetAsync(petWithoutPhotoUrls);
