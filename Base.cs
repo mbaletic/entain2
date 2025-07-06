@@ -13,8 +13,8 @@ namespace entain2
     [TestClass]
     public class Base
     {
-        public static HttpClient httpClient;
-        public static Client client;
+        public static HttpClient httpClient = null!;
+        public static Client client = null!;
         public TestContext TestContext { get; set; }
 
         [AssemblyInitialize]

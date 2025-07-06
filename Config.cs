@@ -8,10 +8,10 @@ namespace entain2
 {
     public class Config
     {
-        public string BaseUrl { get; set; }
+        public required string BaseUrl { get; set; }
         public int TimeoutSeconds { get; set; }
-        public string Environment { get; set; }
-        public string ApiKey { get; set; }
+        public string? Environment { get; set; }
+        public string? ApiKey { get; set; }
 
     }
 }

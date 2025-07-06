@@ -76,10 +76,19 @@ namespace entain2.Tests
         public async Task TryCreatePetWithEmptyRequestBody()
         {
             var emptyBody = @"{
-        }";
+    }";
 
             var response = await RawJsonClient.PostPetAsync(emptyBody);
-            PetGenerator.generatedPetIds.Add(response.Content.ReadFromJsonAsync<Pet>().Result.Id);
+
+            var pet = await response.Content.ReadFromJsonAsync<Pet>();
+            if (pet == null)
+            {
+                Assert.Fail("Response deserialization failed");
+                return;
+            }
+
+            PetGenerator.generatedPetIds.Add(pet.Id);
+
             Assert.IsTrue((int)response.StatusCode != 200, "Endpoint allows empty request body");
         }
 

@@ -13,7 +13,7 @@ namespace entain2.Utils
     {
         private static string logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
         private static string logFilePath;
-        public static TestContext TestContext { get; set; }
+        public static TestContext? TestContext { get; set; }
 
         static Logger()
         {

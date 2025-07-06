@@ -126,7 +126,9 @@ namespace entain2.Tests
         [TestMethod]
         public async Task FindByTags()
         {
+#pragma warning disable CS0612 // Type or member is obsolete
             var response = await client.FindPetsByTagsAsync(new List<string> { "test" });
+#pragma warning restore CS0612 // Type or member is obsolete
             Assert.IsNotNull(response, "Find by tags operation returned nothing.");
         }
 

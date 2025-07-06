@@ -32,7 +32,7 @@ public class LoggingHandler : DelegatingHandler
             Logger.Log($"Response Body:\n{FormatJson(responseBody)}");
 
 
-            response.Content = new StringContent(responseBody, Encoding.UTF8, response.Content.Headers?.ContentType?.MediaType);
+            response.Content = new StringContent(responseBody, Encoding.UTF8, response.Content.Headers?.ContentType?.MediaType ?? "application/json");
         }
 
         return response;
