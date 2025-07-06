@@ -84,7 +84,7 @@ namespace entain2.Tests
         public async Task CheckIfThereAreAvailablePets()
         {
             IEnumerable<Pet> availablePets;
-            availablePets = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available });
+            availablePets = await client.FindPetsByStatusAsync([PetStatus.Available]);
 
             Assert.IsNotNull(availablePets.Count(), "There are no available pets.");
             foreach (var pet in availablePets)
@@ -98,7 +98,7 @@ namespace entain2.Tests
         public async Task CheckIfThereArePendingPets()
         {
             IEnumerable<Pet> pendingPets;
-            pendingPets = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Pending });
+            pendingPets = await client.FindPetsByStatusAsync([PetStatus.Pending]);
 
             Assert.IsNotNull(pendingPets.Count(), "There are no pending pets.");
             foreach (var pet in pendingPets)
@@ -113,7 +113,7 @@ namespace entain2.Tests
         public async Task CheckIfThereAreSoldPets()
         {
             IEnumerable<Pet> soldPets;
-            soldPets = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Sold });
+            soldPets = await client.FindPetsByStatusAsync([PetStatus.Sold]);
 
             Assert.IsNotNull(soldPets.Count(), "There are no sold pets.");
             foreach (var pet in soldPets)
@@ -126,9 +126,7 @@ namespace entain2.Tests
         [TestMethod]
         public async Task FindByTags()
         {
-#pragma warning disable CS0612 // Type or member is obsolete
-            var response = await client.FindPetsByTagsAsync(new List<string> { "test" });
-#pragma warning restore CS0612 // Type or member is obsolete
+            var response = await client.FindPetsByTagsAsync(["test"]);
             Assert.IsNotNull(response, "Find by tags operation returned nothing.");
         }
 

@@ -8,8 +8,8 @@ namespace entain2.Utils
 {
     public static class PetGenerator
     {
-        public static List<long> generatedPetIds = new List<long>();
-        static Random random = new Random();
+        public static List<long> generatedPetIds = [];
+        static readonly Random random = new();
         public static string GenerateName()
         {
 
@@ -21,17 +21,19 @@ namespace entain2.Utils
             for (int i = 0; i < size; i++)
             {
                 int x = random.Next(26);
-                randomString = randomString + str[x];
+                randomString += str[x];
             }
             return randomString;
         }
         public static Pet CreateValidPet()
         {
-            Pet pet = new Pet();
-            pet.Id = random.Next(1000);
-            pet.Name = GenerateName();
-            pet.Status = (PetStatus)random.Next(0, 2);
-            pet.PhotoUrls = new List<string>();
+            Pet pet = new()
+            {
+                Id = random.Next(1000),
+                Name = GenerateName(),
+                Status = (PetStatus)random.Next(0, 2),
+                PhotoUrls = []
+            };
             generatedPetIds.Add(pet.Id);
             return pet;
         }

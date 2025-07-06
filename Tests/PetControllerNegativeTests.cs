@@ -102,7 +102,7 @@ namespace entain2.Tests
         [TestMethod]
         public async Task TryCreateEmptyPet()
         {
-            Pet emptyPet = new Pet();
+            Pet emptyPet = new();
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             {
                 await client.AddPetAsync(emptyPet);

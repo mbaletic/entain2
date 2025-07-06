@@ -22,9 +22,11 @@ namespace entain2
         {
             var loggingHandler = new LoggingHandler(new HttpClientHandler());
             httpClient = new HttpClient(loggingHandler);
-            client = new Client(httpClient);
-            client.BaseUrl = ConfigManager.Settings.BaseUrl;
-            var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
+            client = new Client(httpClient)
+            {
+                BaseUrl = ConfigManager.Settings.BaseUrl
+            };
+            var response = await client.FindPetsByStatusAsync([PetStatus.Available, PetStatus.Sold, PetStatus.Pending]);
             Logger.Log($"Start of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}", true);
         }
 
@@ -57,7 +59,7 @@ namespace entain2
         [AssemblyCleanup]
         public static async Task SuiteTeardown()
         {
-            var response = await client.FindPetsByStatusAsync(new List<PetStatus> { PetStatus.Available, PetStatus.Sold, PetStatus.Pending });
+            var response = await client.FindPetsByStatusAsync([PetStatus.Available, PetStatus.Sold, PetStatus.Pending]);
             Logger.Log($"End of the test:\n{JsonConvert.SerializeObject(response, Formatting.Indented)}", true);
             httpClient.Dispose();
         }

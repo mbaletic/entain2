@@ -3,54 +3,54 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
 
-public class LoggingHandler : DelegatingHandler
+namespace entain2
 {
-    public LoggingHandler(HttpMessageHandler innerHandler)
-        : base(innerHandler) { }
-
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    public class LoggingHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
     {
-
-        Logger.Log($"Request: {request.Method} {request.RequestUri}");
-
-
-        if (request.Content != null)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var requestBody = await request.Content.ReadAsStringAsync(cancellationToken);
-            Logger.Log($"Request Body:\n{FormatJson(requestBody)}");
+
+            Logger.Log($"Request: {request.Method} {request.RequestUri}");
+
+
+            if (request.Content != null)
+            {
+                var requestBody = await request.Content.ReadAsStringAsync(cancellationToken);
+                Logger.Log($"Request Body:\n{FormatJson(requestBody)}");
+            }
+
+            var response = await base.SendAsync(request, cancellationToken);
+
+
+            Logger.Log($"Response: {(int)response.StatusCode} {response.ReasonPhrase}");
+
+
+            if (response.Content != null)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                Logger.Log($"Response Body:\n{FormatJson(responseBody)}");
+
+
+                response.Content = new StringContent(responseBody, Encoding.UTF8, response.Content.Headers?.ContentType?.MediaType ?? "application/json");
+            }
+
+            return response;
         }
 
-        var response = await base.SendAsync(request, cancellationToken);
-
-
-        Logger.Log($"Response: {(int)response.StatusCode} {response.ReasonPhrase}");
-
-
-        if (response.Content != null)
+        public static string FormatJson(string content)
         {
-            var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-            Logger.Log($"Response Body:\n{FormatJson(responseBody)}");
+            if (string.IsNullOrWhiteSpace(content))
+                return "(empty)";
 
-
-            response.Content = new StringContent(responseBody, Encoding.UTF8, response.Content.Headers?.ContentType?.MediaType ?? "application/json");
-        }
-
-        return response;
-    }
-
-    public static string FormatJson(string content)
-    {
-        if (string.IsNullOrWhiteSpace(content))
-            return "(empty)";
-
-        try
-        {
-            var parsed = JToken.Parse(content);
-            return parsed.ToString(Formatting.Indented);
-        }
-        catch (JsonReaderException)
-        {
-            return content;
+            try
+            {
+                var parsed = JToken.Parse(content);
+                return parsed.ToString(Formatting.Indented);
+            }
+            catch (JsonReaderException)
+            {
+                return content;
+            }
         }
     }
 }

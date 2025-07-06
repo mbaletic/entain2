@@ -11,8 +11,8 @@ namespace entain2.Utils
     /// </summary>
     public static class Logger
     {
-        private static string logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-        private static string logFilePath;
+        private readonly static string logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+        private readonly static string logFilePath;
         public static TestContext? TestContext { get; set; }
 
         static Logger()
