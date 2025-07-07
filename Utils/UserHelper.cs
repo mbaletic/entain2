@@ -18,7 +18,7 @@ namespace entain2.Utils
         {
             return new User()
             {
-                Username = NameFaker.FemaleName() + NameFaker.FemaleName() + random.Next(0,2000).ToString(),
+                Username = NameFaker.LastName() + random.Next(0,2000).ToString(),
                 FirstName = NameFaker.FirstName(),
                 LastName = NameFaker.LastName(),
                 Email = InternetFaker.Email(),
