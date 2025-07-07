@@ -1,4 +1,5 @@
 ﻿using entain2.Utils;
+using Newtonsoft.Json;
 
 namespace entain2.Tests.PetController
 {
@@ -36,8 +37,8 @@ namespace entain2.Tests.PetController
 
             var responsePet = await client.GetPetByIdAsync(localPet.Id);
 
-            Assert.IsTrue(localPet.Name == responsePet.Name, "Response pet name differs from the one we created.");
-            Assert.IsTrue(localPet.Id == responsePet.Id, "Response ID differs from the one we created.");
+            Assert.IsTrue(localPet.Name == responsePet.Result.Name, "Response pet name differs from the one we created.");
+            Assert.IsTrue(localPet.Id == responsePet.Result.Id, "Response ID differs from the one we created.");
         }
 
         [TestMethod]
@@ -60,7 +61,7 @@ namespace entain2.Tests.PetController
             await client.UpdatePetAsync(localPet);
 
             var updatedPet = await client.GetPetByIdAsync(localPet.Id);
-            Assert.IsTrue(localPet.Name == updatedPet.Name, "Name of the remote pet didn't update after patching it's name.");
+            Assert.IsTrue(localPet.Name == updatedPet.Result.Name, "Name of the remote pet didn't update after patching it's name.");
 
         }
         [TestMethod]
@@ -77,14 +78,14 @@ namespace entain2.Tests.PetController
 
             var remotePet = await client.GetPetByIdAsync(localPet.Id);
             fileStream.Close();
-            Assert.IsNotNull(remotePet.PhotoUrls);
+            Assert.IsNotNull(remotePet.Result.PhotoUrls);
         }
 
         [TestMethod]
         public async Task CheckIfThereAreAvailablePets()
         {
-            IEnumerable<Pet> availablePets;
-            availablePets = await client.FindPetsByStatusAsync([PetStatus.Available]);
+            var response = await client.FindPetsByStatusAsync([PetStatus.Available]);
+            var availablePets = response.Result;
 
             Assert.IsNotNull(availablePets.Count(), "There are no available pets.");
             foreach (var pet in availablePets)
@@ -97,8 +98,8 @@ namespace entain2.Tests.PetController
         [TestMethod]
         public async Task CheckIfThereArePendingPets()
         {
-            IEnumerable<Pet> pendingPets;
-            pendingPets = await client.FindPetsByStatusAsync([PetStatus.Pending]);
+            var response= await client.FindPetsByStatusAsync([PetStatus.Pending]);
+            var pendingPets = response.Result;
 
             Assert.IsNotNull(pendingPets.Count(), "There are no pending pets.");
             foreach (var pet in pendingPets)
@@ -112,8 +113,8 @@ namespace entain2.Tests.PetController
         [TestMethod]
         public async Task CheckIfThereAreSoldPets()
         {
-            IEnumerable<Pet> soldPets;
-            soldPets = await client.FindPetsByStatusAsync([PetStatus.Sold]);
+            var response = await client.FindPetsByStatusAsync([PetStatus.Sold]);
+            var soldPets = response.Result;
 
             Assert.IsNotNull(soldPets.Count(), "There are no sold pets.");
             foreach (var pet in soldPets)

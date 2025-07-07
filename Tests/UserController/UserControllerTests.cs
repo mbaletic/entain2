@@ -36,7 +36,18 @@ namespace entain2.Tests.UserController
             var remoteUser = await client.GetUserByNameAsync(defaultUser.Username);
 
             Assert.IsNotNull(remoteUser);
-            Assert.IsTrue(remoteUser.ToJson() == defaultUser.ToJson());
+            Assert.IsTrue(remoteUser.Result.ToJson() == defaultUser.ToJson(),"Default user values have been changed.");
+        }
+
+        [TestMethod]
+        public async Task LoginDefaulUser()
+        {
+            var response = await client.LoginUserAsync(defaultUser.Username, defaultUser.Password);
+            
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.StatusCode == 200);
+            Assert.IsTrue(response.Result.Contains("logged in user"));
+
         }
     }
 }

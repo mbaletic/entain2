@@ -80,7 +80,7 @@ namespace entain2
         /// <param name="file">file to upload</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> UploadFileAsync(long petId, string additionalMetadata, FileParameter file)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<ApiResponse>> UploadFileAsync(long petId, string additionalMetadata, FileParameter file)
         {
             return UploadFileAsync(petId, additionalMetadata, file, System.Threading.CancellationToken.None);
         }
@@ -94,7 +94,7 @@ namespace entain2
         /// <param name="file">file to upload</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> UploadFileAsync(long petId, string additionalMetadata, FileParameter file, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<ApiResponse>> UploadFileAsync(long petId, string additionalMetadata, FileParameter file, System.Threading.CancellationToken cancellationToken)
         {
             if (petId == null)
                 throw new System.ArgumentNullException("petId");
@@ -163,7 +163,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<ApiResponse>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -190,7 +190,7 @@ namespace entain2
         /// </summary>
         /// <param name="body">Pet object that needs to be added to the store</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task AddPetAsync(Pet body)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> AddPetAsync(Pet body)
         {
             return AddPetAsync(body, System.Threading.CancellationToken.None);
         }
@@ -201,7 +201,7 @@ namespace entain2
         /// </summary>
         /// <param name="body">Pet object that needs to be added to the store</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task AddPetAsync(Pet body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> AddPetAsync(Pet body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -255,8 +255,7 @@ namespace entain2
 
                         if (status_ == 200 || status_ == 204)
                         {
-
-                            return;
+                            return new SwaggerResponse(status_, headers_);
                         }
                         else
                         {
@@ -283,7 +282,7 @@ namespace entain2
         /// </summary>
         /// <param name="body">Pet object that needs to be added to the store</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UpdatePetAsync(Pet body)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> UpdatePetAsync(Pet body)
         {
             return UpdatePetAsync(body, System.Threading.CancellationToken.None);
         }
@@ -294,7 +293,7 @@ namespace entain2
         /// </summary>
         /// <param name="body">Pet object that needs to be added to the store</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UpdatePetAsync(Pet body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> UpdatePetAsync(Pet body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -360,8 +359,7 @@ namespace entain2
 
                         if (status_ == 200 || status_ == 204)
                         {
-
-                            return;
+                            return new SwaggerResponse(status_, headers_);
                         }
                         else
                         {
@@ -392,7 +390,7 @@ namespace entain2
         /// <param name="status">Status values that need to be considered for filter</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<PetStatus> status)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<Pet>>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<PetStatus> status)
         {
             return FindPetsByStatusAsync(status, System.Threading.CancellationToken.None);
         }
@@ -407,7 +405,7 @@ namespace entain2
         /// <param name="status">Status values that need to be considered for filter</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<PetStatus> status, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<Pet>>> FindPetsByStatusAsync(System.Collections.Generic.IEnumerable<PetStatus> status, System.Threading.CancellationToken cancellationToken)
         {
             if (status == null)
                 throw new System.ArgumentNullException("status");
@@ -459,7 +457,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<System.Collections.Generic.ICollection<Pet>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -497,7 +495,7 @@ namespace entain2
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         [System.Obsolete]
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByTagsAsync(System.Collections.Generic.IEnumerable<string> tags)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<Pet>>> FindPetsByTagsAsync(System.Collections.Generic.IEnumerable<string> tags)
         {
             return FindPetsByTagsAsync(tags, System.Threading.CancellationToken.None);
         }
@@ -513,7 +511,7 @@ namespace entain2
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         [System.Obsolete]
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Pet>> FindPetsByTagsAsync(System.Collections.Generic.IEnumerable<string> tags, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<Pet>>> FindPetsByTagsAsync(System.Collections.Generic.IEnumerable<string> tags, System.Threading.CancellationToken cancellationToken)
         {
             if (tags == null)
                 throw new System.ArgumentNullException("tags");
@@ -565,7 +563,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<System.Collections.Generic.ICollection<Pet>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -602,7 +600,7 @@ namespace entain2
         /// <param name="petId">ID of pet to return</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Pet> GetPetByIdAsync(long petId)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<Pet>> GetPetByIdAsync(long petId)
         {
             return GetPetByIdAsync(petId, System.Threading.CancellationToken.None);
         }
@@ -617,7 +615,7 @@ namespace entain2
         /// <param name="petId">ID of pet to return</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Pet> GetPetByIdAsync(long petId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<Pet>> GetPetByIdAsync(long petId, System.Threading.CancellationToken cancellationToken)
         {
             if (petId == null)
                 throw new System.ArgumentNullException("petId");
@@ -667,7 +665,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<Pet>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -708,7 +706,7 @@ namespace entain2
         /// <param name="name">Updated name of the pet</param>
         /// <param name="status">Updated status of the pet</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UpdatePetWithFormAsync(long petId, string name, string status)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> UpdatePetWithFormAsync(long petId, string name, string status)
         {
             return UpdatePetWithFormAsync(petId, name, status, System.Threading.CancellationToken.None);
         }
@@ -721,7 +719,7 @@ namespace entain2
         /// <param name="name">Updated name of the pet</param>
         /// <param name="status">Updated status of the pet</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UpdatePetWithFormAsync(long petId, string name, string status, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> UpdatePetWithFormAsync(long petId, string name, string status, System.Threading.CancellationToken cancellationToken)
         {
             if (petId == null)
                 throw new System.ArgumentNullException("petId");
@@ -778,8 +776,7 @@ namespace entain2
 
                         if (status_ == 200 || status_ == 204)
                         {
-
-                            return;
+                            return new SwaggerResponse(status_, headers_);
                         }
                         else
                         {
@@ -806,7 +803,7 @@ namespace entain2
         /// </summary>
         /// <param name="petId">Pet id to delete</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeletePetAsync(string api_key, long petId)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> DeletePetAsync(string api_key, long petId)
         {
             return DeletePetAsync(api_key, petId, System.Threading.CancellationToken.None);
         }
@@ -817,7 +814,7 @@ namespace entain2
         /// </summary>
         /// <param name="petId">Pet id to delete</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeletePetAsync(string api_key, long petId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> DeletePetAsync(string api_key, long petId, System.Threading.CancellationToken cancellationToken)
         {
             if (petId == null)
                 throw new System.ArgumentNullException("petId");
@@ -877,8 +874,7 @@ namespace entain2
 
                         if (status_ == 200 || status_ == 204)
                         {
-
-                            return;
+                            return new SwaggerResponse(status_, headers_);
                         }
                         else
                         {
@@ -908,7 +904,7 @@ namespace entain2
         /// </remarks>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.IDictionary<string, int>> GetInventoryAsync()
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.IDictionary<string, int>>> GetInventoryAsync()
         {
             return GetInventoryAsync(System.Threading.CancellationToken.None);
         }
@@ -922,7 +918,7 @@ namespace entain2
         /// </remarks>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.IDictionary<string, int>> GetInventoryAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.IDictionary<string, int>>> GetInventoryAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -968,7 +964,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<System.Collections.Generic.IDictionary<string, int>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -996,7 +992,7 @@ namespace entain2
         /// <param name="body">order placed for purchasing the pet</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Order> PlaceOrderAsync(Order body)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<Order>> PlaceOrderAsync(Order body)
         {
             return PlaceOrderAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1008,7 +1004,7 @@ namespace entain2
         /// <param name="body">order placed for purchasing the pet</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Order> PlaceOrderAsync(Order body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<Order>> PlaceOrderAsync(Order body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1061,7 +1057,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<Order>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -1098,7 +1094,7 @@ namespace entain2
         /// <param name="orderId">ID of pet that needs to be fetched</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Order> GetOrderByIdAsync(long orderId)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<Order>> GetOrderByIdAsync(long orderId)
         {
             return GetOrderByIdAsync(orderId, System.Threading.CancellationToken.None);
         }
@@ -1113,7 +1109,7 @@ namespace entain2
         /// <param name="orderId">ID of pet that needs to be fetched</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Order> GetOrderByIdAsync(long orderId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<Order>> GetOrderByIdAsync(long orderId, System.Threading.CancellationToken cancellationToken)
         {
             if (orderId == null)
                 throw new System.ArgumentNullException("orderId");
@@ -1163,7 +1159,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<Order>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -1205,7 +1201,7 @@ namespace entain2
         /// </remarks>
         /// <param name="orderId">ID of the order that needs to be deleted</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteOrderAsync(long orderId)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> DeleteOrderAsync(long orderId)
         {
             return DeleteOrderAsync(orderId, System.Threading.CancellationToken.None);
         }
@@ -1219,7 +1215,7 @@ namespace entain2
         /// </remarks>
         /// <param name="orderId">ID of the order that needs to be deleted</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteOrderAsync(long orderId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> DeleteOrderAsync(long orderId, System.Threading.CancellationToken cancellationToken)
         {
             if (orderId == null)
                 throw new System.ArgumentNullException("orderId");
@@ -1276,8 +1272,7 @@ namespace entain2
 
                         if (status_ == 200 || status_ == 204)
                         {
-
-                            return;
+                            return new SwaggerResponse(status_, headers_);
                         }
                         else
                         {
@@ -1305,7 +1300,7 @@ namespace entain2
         /// <param name="body">List of user object</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CreateUsersWithListInputAsync(System.Collections.Generic.IEnumerable<User> body)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> CreateUsersWithListInputAsync(System.Collections.Generic.IEnumerable<User> body)
         {
             return CreateUsersWithListInputAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1317,7 +1312,7 @@ namespace entain2
         /// <param name="body">List of user object</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CreateUsersWithListInputAsync(System.Collections.Generic.IEnumerable<User> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> CreateUsersWithListInputAsync(System.Collections.Generic.IEnumerable<User> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1362,6 +1357,7 @@ namespace entain2
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
+                        return new SwaggerResponse(status_, headers_);
                     }
                     finally
                     {
@@ -1383,7 +1379,7 @@ namespace entain2
         /// <param name="username">The name that needs to be fetched. Use user1 for testing.</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<User> GetUserByNameAsync(string username)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<User>> GetUserByNameAsync(string username)
         {
             return GetUserByNameAsync(username, System.Threading.CancellationToken.None);
         }
@@ -1395,7 +1391,7 @@ namespace entain2
         /// <param name="username">The name that needs to be fetched. Use user1 for testing.</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<User> GetUserByNameAsync(string username, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<User>> GetUserByNameAsync(string username, System.Threading.CancellationToken cancellationToken)
         {
             if (username == null)
                 throw new System.ArgumentNullException("username");
@@ -1445,7 +1441,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<User>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -1488,7 +1484,7 @@ namespace entain2
         /// <param name="username">name that need to be updated</param>
         /// <param name="body">Updated user object</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UpdateUserAsync(string username, User body)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> UpdateUserAsync(string username, User body)
         {
             return UpdateUserAsync(username, body, System.Threading.CancellationToken.None);
         }
@@ -1503,7 +1499,7 @@ namespace entain2
         /// <param name="username">name that need to be updated</param>
         /// <param name="body">Updated user object</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UpdateUserAsync(string username, User body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> UpdateUserAsync(string username, User body, System.Threading.CancellationToken cancellationToken)
         {
             if (username == null)
                 throw new System.ArgumentNullException("username");
@@ -1567,8 +1563,7 @@ namespace entain2
 
                         if (status_ == 200 || status_ == 204)
                         {
-
-                            return;
+                            return new SwaggerResponse(status_, headers_);
                         }
                         else
                         {
@@ -1598,7 +1593,7 @@ namespace entain2
         /// </remarks>
         /// <param name="username">The name that needs to be deleted</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeleteUserAsync(string username)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> DeleteUserAsync(string username)
         {
             return DeleteUserAsync(username, System.Threading.CancellationToken.None);
         }
@@ -1612,7 +1607,7 @@ namespace entain2
         /// </remarks>
         /// <param name="username">The name that needs to be deleted</param>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeleteUserAsync(string username, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> DeleteUserAsync(string username, System.Threading.CancellationToken cancellationToken)
         {
             if (username == null)
                 throw new System.ArgumentNullException("username");
@@ -1669,8 +1664,7 @@ namespace entain2
 
                         if (status_ == 200 || status_ == 204)
                         {
-
-                            return;
+                            return new SwaggerResponse(status_, headers_);
                         }
                         else
                         {
@@ -1699,7 +1693,7 @@ namespace entain2
         /// <param name="password">The password for login in clear text</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> LoginUserAsync(string username, string password)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<string>> LoginUserAsync(string username, string password)
         {
             return LoginUserAsync(username, password, System.Threading.CancellationToken.None);
         }
@@ -1712,7 +1706,7 @@ namespace entain2
         /// <param name="password">The password for login in clear text</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> LoginUserAsync(string username, string password, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<string>> LoginUserAsync(string username, string password, System.Threading.CancellationToken cancellationToken)
         {
             if (username == null)
                 throw new System.ArgumentNullException("username");
@@ -1768,7 +1762,7 @@ namespace entain2
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new SwaggerResponse<string>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -1801,7 +1795,7 @@ namespace entain2
         /// </summary>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task LogoutUserAsync()
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> LogoutUserAsync()
         {
             return LogoutUserAsync(System.Threading.CancellationToken.None);
         }
@@ -1812,7 +1806,7 @@ namespace entain2
         /// </summary>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task LogoutUserAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> LogoutUserAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -1850,6 +1844,7 @@ namespace entain2
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
+                        return new SwaggerResponse(status_, headers_);
                     }
                     finally
                     {
@@ -1871,7 +1866,7 @@ namespace entain2
         /// <param name="body">List of user object</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CreateUsersWithArrayInputAsync(System.Collections.Generic.IEnumerable<User> body)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> CreateUsersWithArrayInputAsync(System.Collections.Generic.IEnumerable<User> body)
         {
             return CreateUsersWithArrayInputAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1883,7 +1878,7 @@ namespace entain2
         /// <param name="body">List of user object</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CreateUsersWithArrayInputAsync(System.Collections.Generic.IEnumerable<User> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> CreateUsersWithArrayInputAsync(System.Collections.Generic.IEnumerable<User> body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -1928,6 +1923,7 @@ namespace entain2
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
+                        return new SwaggerResponse(status_, headers_);
                     }
                     finally
                     {
@@ -1952,7 +1948,7 @@ namespace entain2
         /// <param name="body">Created user object</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CreateUserAsync(User body)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse> CreateUserAsync(User body)
         {
             return CreateUserAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1967,7 +1963,7 @@ namespace entain2
         /// <param name="body">Created user object</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CreateUserAsync(User body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse> CreateUserAsync(User body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -2012,6 +2008,7 @@ namespace entain2
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
+                        return new SwaggerResponse(status_, headers_);
                     }
                     finally
                     {
@@ -2341,6 +2338,8 @@ namespace entain2
 
     }
 
+    }
+
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public enum PetStatus
     {
@@ -2399,6 +2398,32 @@ namespace entain2
     }
 
 
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SwaggerResponse
+    {
+        public int StatusCode { get; private set; }
+
+        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
+
+        public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers)
+        {
+            StatusCode = statusCode;
+            Headers = headers;
+        }
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class SwaggerResponse<TResult> : SwaggerResponse
+    {
+        public TResult Result { get; private set; }
+
+        public SwaggerResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result)
+            : base(statusCode, headers)
+        {
+            Result = result;
+        }
+    }
+
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class ApiException : System.Exception
@@ -2435,7 +2460,7 @@ namespace entain2
         }
     }
 
-}
+
 
 #pragma warning restore 108
 #pragma warning restore 114
