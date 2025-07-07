@@ -14,8 +14,7 @@ namespace entain2.Tests.PetController
     /// Find pets by all 3 statuses
     /// </summary>
     [TestClass]
-    [TestCategory("Regression")]
-    [TestCategory("Positive")]
+    [TestCategory("Pet operations")]
     public sealed class PetControllerTests : Base
     {
         [TestMethod]

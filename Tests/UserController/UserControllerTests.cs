@@ -4,12 +4,24 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace entain2.Tests.UserController
 {
+    /// <summary>
+    /// Tests for user management endpoints of the API covering both standard workflows and known edge‑case bugs.
+    /// Validates retrieving the default user by username and comparing all fields.
+    /// Confirms successful login with valid credentials.
+    /// Attempts logout to expose the unimplemented or faulty endpoint.
+    /// Creates a new valid user and ensures the operation succeeds.
+    /// Verifies that creating an empty user payload does not return 200 OK.
+    /// Ensures that deleting a non‑existent user throws an error.
+    /// </summary>
     [TestClass]
+    [TestCategory("User operations")]
     public sealed class UserControllerTests : Base
     {
         private User defaultUser;
@@ -27,7 +39,7 @@ namespace entain2.Tests.UserController
 
         public UserControllerTests()
         {
-           defaultUser = JsonConvert.DeserializeObject<User>(defaultUserJson) ?? throw new Exception("Can't deserialize default user.");
+            defaultUser = JsonConvert.DeserializeObject<User>(defaultUserJson) ?? throw new Exception("Can't deserialize default localUser.");
         }
 
         [TestMethod]
@@ -36,18 +48,78 @@ namespace entain2.Tests.UserController
             var remoteUser = await client.GetUserByNameAsync(defaultUser.Username);
 
             Assert.IsNotNull(remoteUser);
-            Assert.IsTrue(remoteUser.Result.ToJson() == defaultUser.ToJson(),"Default user values have been changed.");
+            Assert.IsTrue(remoteUser.Result.ToJson() == defaultUser.ToJson(), "Default remote user values have been changed.");
         }
 
         [TestMethod]
         public async Task LoginDefaulUser()
         {
             var response = await client.LoginUserAsync(defaultUser.Username, defaultUser.Password);
-            
+
+            Assert.IsNotNull(response.Result);
+            Assert.IsTrue(response.StatusCode == 200);
+            Assert.IsTrue(response.Result.Message.Contains("logged in"));
+
+        }
+
+        /// <summary>
+        /// Bug:
+        /// What does this endpoint even do?
+        /// Accepts no body, headers, always returns ok in the response
+        /// Probably not finished or a bug
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Bugs")]
+        public async Task LogoutDefaultUser()
+        {
+            var response = await client.LogoutUserAsync();
+
             Assert.IsNotNull(response);
             Assert.IsTrue(response.StatusCode == 200);
-            Assert.IsTrue(response.Result.Contains("logged in user"));
 
+            Assert.Fail("Endpoint is bugged or not implemented");
+        }
+
+        [TestMethod]
+        public async Task CreateNewUser()
+        {
+            User localUser = UserHelper.CreateValidUser();
+            var response = await client.CreateUserAsync(localUser);
+
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.StatusCode == 200);
+
+
+        }
+        /// <summary>
+        /// Bug:
+        /// Allows sending empty request body, ends in 200 OK nonetheless
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Bugs")]
+        public async Task CreateEmptyUser()
+        {
+            User localUser = new();
+            var response = await client.CreateUserAsync(localUser);
+
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.StatusCode != 200, "Endpoint allows empty creating with empty user request.");
+        }
+
+        /// <summary>
+        /// Bug:
+        /// We're passing a username which we just generated, which doesn't exist remotely
+        /// Then trying to delete it
+        /// </summary>
+        [TestMethod]
+        [TestCategory("Bugs")]
+        public async Task DeleteNonExistantUser()
+        {
+            User localUser = UserHelper.CreateValidUser();
+            await Assert.ThrowsExceptionAsync<ApiException>(async () =>
+            {
+                await client.DeleteUserAsync(localUser.Username);
+            }, "Endpoint allows deleting user which doesn't exist.");
         }
     }
 }

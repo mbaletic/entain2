@@ -12,18 +12,20 @@ namespace entain2.Utils
     {
         
         static readonly Random random = new();
+        public static List<User> users = [];
         
         public static User CreateValidUser()
         {
             return new User()
             {
+                Username = NameFaker.FemaleName() + NameFaker.FemaleName() + random.Next(0,2000).ToString(),
                 FirstName = NameFaker.FirstName(),
                 LastName = NameFaker.LastName(),
                 Email = InternetFaker.Email(),
                 Id = random.Next(),
                 Password = StringFaker.AlphaNumeric(12),
                 Phone = StringFaker.AlphaNumeric(12),
-                UserStatus = random.Next(0,1)
+                UserStatus = random.Next(0, 1)
             };
         }
     }

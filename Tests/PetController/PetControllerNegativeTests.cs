@@ -8,8 +8,7 @@ namespace entain2.Tests.PetController
     /// Using raw JSON requests by omitting required parameters
     /// </summary>
     [TestClass]
-    [TestCategory("Regression")]
-    [TestCategory("Negative")]
+    [TestCategory("Pet operations")]
     public sealed class PetControllerNegativeTests : Base
     {
         [TestMethod]
