@@ -1693,7 +1693,7 @@ namespace entain2
         /// <param name="password">The password for login in clear text</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<SwaggerResponse<string>> LoginUserAsync(string username, string password)
+        public virtual System.Threading.Tasks.Task<SwaggerResponse<LoginResponse>> LoginUserAsync(string username, string password)
         {
             return LoginUserAsync(username, password, System.Threading.CancellationToken.None);
         }
@@ -1706,7 +1706,7 @@ namespace entain2
         /// <param name="password">The password for login in clear text</param>
         /// <returns>successful operation</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<SwaggerResponse<string>> LoginUserAsync(string username, string password, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SwaggerResponse<LoginResponse>> LoginUserAsync(string username, string password, System.Threading.CancellationToken cancellationToken)
         {
             if (username == null)
                 throw new System.ArgumentNullException("username");
@@ -1757,12 +1757,12 @@ namespace entain2
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<LoginResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return new SwaggerResponse<string>(status_, headers_, objectResponse_.Object);
+                            return new SwaggerResponse<LoginResponse>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -2134,6 +2134,13 @@ namespace entain2
             var result = System.Convert.ToString(value, cultureInfo);
             return result == null ? "" : result;
         }
+    }
+
+    public class LoginResponse
+    {
+        public int Code { get; set; }
+        public string Type { get; set; }
+        public string Message { get; set; }
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))")]
