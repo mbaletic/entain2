@@ -1,4 +1,6 @@
 ﻿using entain2.Utils;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +12,31 @@ namespace entain2.Tests.UserController
     [TestClass]
     public sealed class UserControllerTests : Base
     {
-        [TestMethod]
-        public async Task AddNewBalidUser()
+        private User defaultUser;
+        private string defaultUserJson = @"{
+             ""id"": 1,
+             ""username"": ""user1"",
+             ""firstName"": ""first name 1"",
+             ""lastName"": ""last name 1"",
+             ""email"": ""email1@test.com"",
+             ""password"": ""XXXXXXXXXXX"",
+             ""phone"": ""123-456-7890"",
+             ""userStatus"": 1
+                }";
+
+
+        public UserControllerTests()
         {
-            var user = UserHelper.CreateValidUser();
+           defaultUser = JsonConvert.DeserializeObject<User>(defaultUserJson) ?? throw new Exception("Can't deserialize default user.");
+        }
 
-            await client.CreateUserAsync(user);
+        [TestMethod]
+        public async Task CheckDefaultUser()
+        {
+            var remoteUser = await client.GetUserByNameAsync(defaultUser.Username);
 
+            Assert.IsNotNull(remoteUser);
+            Assert.IsTrue(remoteUser.ToJson() == defaultUser.ToJson());
         }
     }
 }
