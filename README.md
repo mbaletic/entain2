@@ -87,6 +87,8 @@ Logs are saved under `Logs/` with timestamps and echoed to MSTest test output.
 - Add data-driven tests for different input combinations.
 
 ---
+![image](https://github.com/user-attachments/assets/4c49a061-cebb-4c28-b0f0-552f7a19772d)
+
 
 Created by Marko Baletić  
 2025
