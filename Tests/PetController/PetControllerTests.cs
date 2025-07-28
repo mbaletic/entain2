@@ -80,46 +80,20 @@ namespace entain2.Tests.PetController
             Assert.IsNotNull(remotePet.Result.PhotoUrls);
         }
 
-        [TestMethod]
-        public async Task Should_ReturnAvailablePets_When_TheyExist()
+        [DataTestMethod]
+        [DataRow(PetStatus.Available)]
+        [DataRow(PetStatus.Pending)]
+        [DataRow(PetStatus.Sold)]
+        public async Task Should_ReturnPetsByStatus_When_TheyExist(PetStatus status)
         {
-            var response = await client.FindPetsByStatusAsync([PetStatus.Available]);
-            var availablePets = response.Result;
+            var response = await client.FindPetsByStatusAsync([status]);
+            var pets = response.Result;
 
-            Assert.IsNotNull(availablePets.Count(), "There are no available pets.");
-            foreach (var pet in availablePets)
+            Assert.IsNotNull(pets.Count(), $"There are no pets with status {status}.");
+            foreach (var pet in pets)
             {
-                Assert.IsTrue(pet.Status == PetStatus.Available,
-                    $"There is a pet with wrong status - {pet.Status.Value} in the available pet status list.");
-            }
-        }
-
-        [TestMethod]
-        public async Task Should_ReturnPendingPets_When_TheyExist()
-        {
-            var response= await client.FindPetsByStatusAsync([PetStatus.Pending]);
-            var pendingPets = response.Result;
-
-            Assert.IsNotNull(pendingPets.Count(), "There are no pending pets.");
-            foreach (var pet in pendingPets)
-            {
-                Assert.IsTrue(pet.Status == PetStatus.Pending,
-                    $"There is a pet with wrong status - {pet.Status.Value} in the pending pet status list.");
-            }
-
-        }
-
-        [TestMethod]
-        public async Task Should_ReturnSoldPets_When_TheyExist()
-        {
-            var response = await client.FindPetsByStatusAsync([PetStatus.Sold]);
-            var soldPets = response.Result;
-
-            Assert.IsNotNull(soldPets.Count(), "There are no sold pets.");
-            foreach (var pet in soldPets)
-            {
-                Assert.IsTrue(pet.Status == PetStatus.Sold,
-                    $"There is a pet with wrong status - {pet.Status.Value} in the sold pet status list.");
+                Assert.IsTrue(pet.Status == status,
+                    $"There is a pet with wrong status - {pet.Status.Value} in the {status} pet status list.");
             }
         }
 

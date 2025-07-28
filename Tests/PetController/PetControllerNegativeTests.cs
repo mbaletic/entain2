@@ -23,44 +23,38 @@ namespace entain2.Tests.PetController
             $"Service either returned a pet which doesn't exist, or someone created a pet with test ID - {invalidID}.");
         }
 
-        /// <summary>
-        /// Bug:
-        /// This will fail because every Pet should have a name according to Pet model
-        /// but it passes 
-        /// Then when we retrieve the list of pets, it returns the pet without name, causing deserialization error
-        /// Probably bad implementation service-side
-        /// </summary>
-        [TestMethod]
-        [TestCategory("Bugs")]
-        public async Task Should_Fail_When_CreatingPetWithoutName()
+        public enum InvalidPetType
         {
-            Pet petWithoutNameRequest = PetHelper.CreateValidPet();
-            petWithoutNameRequest.Name = null;
-
-            await client.AddPetAsync(petWithoutNameRequest);
-
-            Assert.Fail("Service allowed creating a pet without name being present in the request body.");
+            NoName,
+            NoPhotoUrls,
+            EmptyPet
         }
 
-        /// <summary>
-        /// Bug:
-        /// This will fail because every Pet should have a photo urls according to Pet model
-        /// but it passes 
-        /// Then when we retrieve the list of pets, it returns the pet without photo urls, causing deserialization error
-        /// Probably bad implementation service-side
-        /// </summary>
-
-        [TestMethod]
-        [TestCategory("Bugs")]
-        public async Task Should_ThrowException_When_CreatingPetWithoutPhotoUrls()
+        [DataTestMethod]
+        [DataRow(InvalidPetType.NoName)]
+        [DataRow(InvalidPetType.NoPhotoUrls)]
+        [DataRow(InvalidPetType.EmptyPet)]
+        public async Task Should_ThrowException_When_CreatingInvalidPet(InvalidPetType invalidType)
         {
-            Pet petWithoutPhotoUrls = PetHelper.CreateValidPet();
-            petWithoutPhotoUrls.PhotoUrls = null;
+            Pet pet = null;
+            switch (invalidType)
+            {
+                case InvalidPetType.NoName:
+                    pet = PetHelper.CreateValidPet();
+                    pet.Name = null;
+                    break;
+                case InvalidPetType.NoPhotoUrls:
+                    pet = PetHelper.CreateValidPet();
+                    pet.PhotoUrls = null;
+                    break;
+                case InvalidPetType.EmptyPet:
+                    pet = new Pet();
+                    break;
+            }
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             {
-                await client.AddPetAsync(petWithoutPhotoUrls);
-            }, "Service allows creating a pet without photo urls array being present in the request body.");
-
+                await client.AddPetAsync(pet);
+            }, $"Service allows creation of invalid pet: {invalidType}");
         }
 
         /// <summary>
@@ -70,43 +64,28 @@ namespace entain2.Tests.PetController
         /// With response
         /// {"id":13,"photoUrls":[],"tags":[]}
         /// </summary>
-        [TestMethod]
-        [TestCategory("Bugs")]
-        public async Task Should_ReturnError_When_CreatingPetWithEmptyRequestBody()
+        [DataTestMethod]
+        [DataRow(@"{
+    }")]
+        [DataRow("")]
+        public async Task Should_ReturnError_When_CreatingPetWithInvalidBody(string requestBody)
         {
-            var emptyBody = @"{
-    }";
-
-            var response = await RawJsonClient.PostPetAsync(emptyBody);
-
-            var pet = await response.Content.ReadFromJsonAsync<Pet>();
-            if (pet == null)
+            var response = await RawJsonClient.PostPetAsync(requestBody);
+            if (!string.IsNullOrEmpty(requestBody))
             {
-                Assert.Fail("Response deserialization failed");
-                return;
+                var pet = await response.Content.ReadFromJsonAsync<Pet>();
+                if (pet == null)
+                {
+                    Assert.Fail("Response deserialization failed");
+                    return;
+                }
+                PetHelper.generatedPetIds.Add(pet.Id);
+                Assert.IsTrue((int)response.StatusCode != 200, "Endpoint allows empty request body");
             }
-
-            PetHelper.generatedPetIds.Add(pet.Id);
-
-            Assert.IsTrue((int)response.StatusCode != 200, "Endpoint allows empty request body");
-        }
-
-        [TestMethod]
-        public async Task Should_ReturnError_When_CreatingPetWithNoBody()
-        {
-            var response = await RawJsonClient.PostPetAsync("");
-            Assert.IsTrue((int)response.StatusCode == 405, "Endpoint allows sending no request body");
-        }
-
-        [TestMethod]
-        public async Task Should_ThrowException_When_CreatingEmptyPet()
-        {
-            Pet emptyPet = new();
-            await Assert.ThrowsExceptionAsync<ApiException>(async () =>
+            else
             {
-                await client.AddPetAsync(emptyPet);
-            },"Service allows creation of pet with empty pet object fields");
-            
+                Assert.IsTrue((int)response.StatusCode == 405, "Endpoint allows sending no request body");
+            }
         }
     }
 }
