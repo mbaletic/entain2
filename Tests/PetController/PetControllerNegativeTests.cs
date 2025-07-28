@@ -23,8 +23,6 @@ namespace entain2.Tests.PetController
             $"Service either returned a pet which doesn't exist, or someone created a pet with test ID - {invalidID}.");
         }
 
-        // InvalidPetType enum moved to Utils/InvalidPetType.cs
-
         [DataTestMethod]
         [DataRow(InvalidPetType.NoName)]
         [DataRow(InvalidPetType.NoPhotoUrls)]
