@@ -43,7 +43,7 @@ namespace entain2.Tests.UserController
         }
 
         [TestMethod]
-        public async Task CheckDefaultUser()
+        public async Task Should_ReturnDefaultUser_When_UsernameIsValid()
         {
             var remoteUser = await client.GetUserByNameAsync(defaultUser.Username);
 
@@ -52,7 +52,7 @@ namespace entain2.Tests.UserController
         }
 
         [TestMethod]
-        public async Task LoginDefaulUser()
+        public async Task Should_LoginSuccessfully_When_CredentialsAreValid()
         {
             var response = await client.LoginUserAsync(defaultUser.Username, defaultUser.Password);
 
@@ -70,7 +70,7 @@ namespace entain2.Tests.UserController
         /// </summary>
         [TestMethod]
         [TestCategory("Bugs")]
-        public async Task LogoutDefaultUser()
+        public async Task Should_ReturnOk_When_LogoutIsCalled()
         {
             var response = await client.LogoutUserAsync();
 
@@ -81,7 +81,7 @@ namespace entain2.Tests.UserController
         }
 
         [TestMethod]
-        public async Task CreateNewUser()
+        public async Task Should_CreateUser_When_UserIsValid()
         {
             User localUser = UserHelper.CreateValidUser();
             var response = await client.CreateUserAsync(localUser);
@@ -97,7 +97,7 @@ namespace entain2.Tests.UserController
         /// </summary>
         [TestMethod]
         [TestCategory("Bugs")]
-        public async Task CreateEmptyUser()
+        public async Task Should_ReturnError_When_CreatingEmptyUser()
         {
             User localUser = new();
             var response = await client.CreateUserAsync(localUser);

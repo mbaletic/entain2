@@ -12,7 +12,7 @@ namespace entain2.Tests.PetController
     public sealed class PetControllerNegativeTests : Base
     {
         [TestMethod]
-        public async Task FindByNonExistantId()
+        public async Task Should_ThrowException_When_PetIdDoesNotExist()
         {
             int invalidID = -999;
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>
@@ -32,7 +32,7 @@ namespace entain2.Tests.PetController
         /// </summary>
         [TestMethod]
         [TestCategory("Bugs")]
-        public async Task CreatePetWithoutName()
+        public async Task Should_Fail_When_CreatingPetWithoutName()
         {
             Pet petWithoutNameRequest = PetHelper.CreateValidPet();
             petWithoutNameRequest.Name = null;

@@ -18,7 +18,7 @@ namespace entain2.Tests.PetController
     public sealed class PetControllerTests : Base
     {
         [TestMethod]
-        public async Task CreatePet()
+        public async Task Should_CreatePet_When_PetIsValid()
         {
             Pet localPet = PetHelper.CreateValidPet();
             localPet.Status = PetStatus.Available;
@@ -28,7 +28,7 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task CreatePetAndVerify()
+        public async Task Should_CreateAndRetrievePet_When_PetIsValid()
         {
             Pet localPet = PetHelper.CreateValidPet();
 
@@ -41,7 +41,7 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task CreatePetAndDelete()
+        public async Task Should_DeletePet_When_PetExists()
         {
             Pet localPet = PetHelper.CreateValidPet();
 
@@ -51,7 +51,7 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task CreatePetAndModify()
+        public async Task Should_UpdatePet_When_PetIsModified()
         {
             Pet localPet = PetHelper.CreateValidPet();
             await client.AddPetAsync(localPet);
@@ -64,7 +64,7 @@ namespace entain2.Tests.PetController
 
         }
         [TestMethod]
-        public async Task CreatePetAndAttachImage()
+        public async Task Should_AttachImageToPet_When_ImageIsProvided()
         {
             var imagePath = Path.Combine(AppContext.BaseDirectory, "Resources", "Images", "shiba.jpg");
             var fileStream = File.OpenRead(imagePath);
@@ -81,7 +81,7 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task CheckIfThereAreAvailablePets()
+        public async Task Should_ReturnAvailablePets_When_TheyExist()
         {
             var response = await client.FindPetsByStatusAsync([PetStatus.Available]);
             var availablePets = response.Result;
@@ -95,7 +95,7 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task CheckIfThereArePendingPets()
+        public async Task Should_ReturnPendingPets_When_TheyExist()
         {
             var response= await client.FindPetsByStatusAsync([PetStatus.Pending]);
             var pendingPets = response.Result;
@@ -110,7 +110,7 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task CheckIfThereAreSoldPets()
+        public async Task Should_ReturnSoldPets_When_TheyExist()
         {
             var response = await client.FindPetsByStatusAsync([PetStatus.Sold]);
             var soldPets = response.Result;
