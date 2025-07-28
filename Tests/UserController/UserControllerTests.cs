@@ -47,8 +47,8 @@ namespace entain2.Tests.UserController
         {
             var remoteUser = await client.GetUserByNameAsync(defaultUser.Username);
 
-            Assert.IsNotNull(remoteUser);
-            Assert.IsTrue(remoteUser.Result.ToJson() == defaultUser.ToJson(), "Default remote user values have been changed.");
+            Assert.IsNotNull(remoteUser, "Remote user should not be null.");
+            Assert.AreEqual(defaultUser.ToJson(), remoteUser.Result.ToJson(), "Default remote user values have been changed.");
         }
 
         [TestMethod]
@@ -56,10 +56,9 @@ namespace entain2.Tests.UserController
         {
             var response = await client.LoginUserAsync(defaultUser.Username, defaultUser.Password);
 
-            Assert.IsNotNull(response.Result);
-            Assert.IsTrue(response.StatusCode == 200);
-            Assert.IsTrue(response.Result.Message.Contains("logged in"));
-
+            Assert.IsNotNull(response.Result, "Login response result should not be null.");
+            Assert.AreEqual(200, response.StatusCode, "Login should return status code 200.");
+            StringAssert.Contains(response.Result.Message, "logged in", "Login response message should contain 'logged in'.");
         }
 
         /// <summary>
@@ -86,8 +85,8 @@ namespace entain2.Tests.UserController
             User localUser = UserHelper.CreateValidUser();
             var response = await client.CreateUserAsync(localUser);
 
-            Assert.IsNotNull(response);
-            Assert.IsTrue(response.StatusCode == 200);
+            Assert.IsNotNull(response, "Create user response should not be null.");
+            Assert.AreEqual(200, response.StatusCode, "Create user should return status code 200.");
 
 
         }
@@ -102,8 +101,8 @@ namespace entain2.Tests.UserController
             User localUser = new();
             var response = await client.CreateUserAsync(localUser);
 
-            Assert.IsNotNull(response);
-            Assert.IsTrue(response.StatusCode != 200, "Endpoint allows empty creating with empty user request.");
+            Assert.IsNotNull(response, "Create user response should not be null.");
+            Assert.AreNotEqual(200, response.StatusCode, "Endpoint allows creating with empty user request.");
         }
 
         /// <summary>

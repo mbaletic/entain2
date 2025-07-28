@@ -6,34 +6,30 @@ using System.Threading.Tasks;
 
 namespace entain2.Utils
 {
-    /// <summary>
-    /// Serves as a additional logger to the test project /  failsafe  - to log state of the petstore before, during and after the run
-    /// </summary>
-    public static class Logger
+    public class Logger
     {
-        private readonly static string logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
-        private readonly static string logFilePath;
-        public static TestContext? TestContext { get; set; }
-
-        static Logger()
+        private readonly string logFilePath;
+        private readonly TestContext? testContext;
+        private readonly object fileLock = new();
+        public Logger(string logFilePath, TestContext? testContext)
         {
-            if (!Directory.Exists(logsDirectory))
-            {
-                Directory.CreateDirectory(logsDirectory);
-            }
-
-            string fileName = $"{DateTime.Now:yyyy-MM-dd-HH-mm-ss}.txt";
-            logFilePath = Path.Combine(logsDirectory, fileName);
-            Log("Log file created");
+            this.logFilePath = logFilePath;
+            this.testContext = testContext;
         }
-        public static void Log(string message, bool logToTxtFileOnly = false)
+        public void Log(string message, bool logToTxtFileOnly = false)
         {
             string entry = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - {message}";
-            if (TestContext != null)
+            if (testContext != null)
             {
-                TestContext.WriteLine(entry);
+                testContext.WriteLine(entry);
             }
-            File.AppendAllText(logFilePath, entry + Environment.NewLine);
+            if (!string.IsNullOrEmpty(logFilePath))
+            {
+                lock (fileLock)
+                {
+                    File.AppendAllText(logFilePath, entry + Environment.NewLine);
+                }
+            }
         }
     }
 }

@@ -5,43 +5,35 @@ using System.Text;
 
 namespace entain2
 {
-    public class LoggingHandler(HttpMessageHandler innerHandler) : DelegatingHandler(innerHandler)
+    public class LoggingHandler : DelegatingHandler
     {
+        private readonly Logger logger;
+        public LoggingHandler(HttpMessageHandler innerHandler, Logger logger) : base(innerHandler)
+        {
+            this.logger = logger;
+        }
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-
-            Logger.Log($"Request: {request.Method} {request.RequestUri}");
-
-
+            logger.Log($"Request: {request.Method} {request.RequestUri}");
             if (request.Content != null)
             {
                 var requestBody = await request.Content.ReadAsStringAsync(cancellationToken);
-                Logger.Log($"Request Body:\n{FormatJson(requestBody)}");
+                logger.Log($"Request Body:\n{FormatJson(requestBody)}");
             }
-
             var response = await base.SendAsync(request, cancellationToken);
-
-
-            Logger.Log($"Response: {(int)response.StatusCode} {response.ReasonPhrase}");
-
-
+            logger.Log($"Response: {(int)response.StatusCode} {response.ReasonPhrase}");
             if (response.Content != null)
             {
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-                Logger.Log($"Response Body:\n{FormatJson(responseBody)}");
-
-
+                logger.Log($"Response Body:\n{FormatJson(responseBody)}");
                 response.Content = new StringContent(responseBody, Encoding.UTF8, response.Content.Headers?.ContentType?.MediaType ?? "application/json");
             }
-
             return response;
         }
-
         public static string FormatJson(string content)
         {
             if (string.IsNullOrWhiteSpace(content))
                 return "(empty)";
-
             try
             {
                 var parsed = JToken.Parse(content);

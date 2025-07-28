@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace entain2.Utils
 {
     public static class PetHelper
     {
-        public static List<long> generatedPetIds = [];
-        static readonly Random random = new();
+        public static ConcurrentBag<long> generatedPetIds = new();
+        static readonly ThreadLocal<Random> random = new(() => new Random());
         public static string GenerateName()
         {
 
@@ -20,7 +21,7 @@ namespace entain2.Utils
 
             for (int i = 0; i < size; i++)
             {
-                int x = random.Next(26);
+                int x = random.Value.Next(26);
                 randomString += str[x];
             }
             return randomString;
@@ -29,9 +30,9 @@ namespace entain2.Utils
         {
             Pet pet = new()
             {
-                Id = random.Next(1000),
+                Id = random.Value.Next(1000),
                 Name = GenerateName(),
-                Status = (PetStatus)random.Next(0, 2),
+                Status = (PetStatus)random.Value.Next(0, 2),
                 PhotoUrls = []
             };
             generatedPetIds.Add(pet.Id);

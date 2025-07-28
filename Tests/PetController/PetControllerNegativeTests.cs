@@ -23,12 +23,7 @@ namespace entain2.Tests.PetController
             $"Service either returned a pet which doesn't exist, or someone created a pet with test ID - {invalidID}.");
         }
 
-        public enum InvalidPetType
-        {
-            NoName,
-            NoPhotoUrls,
-            EmptyPet
-        }
+        // InvalidPetType enum moved to Utils/InvalidPetType.cs
 
         [DataTestMethod]
         [DataRow(InvalidPetType.NoName)]
@@ -80,11 +75,11 @@ namespace entain2.Tests.PetController
                     return;
                 }
                 PetHelper.generatedPetIds.Add(pet.Id);
-                Assert.IsTrue((int)response.StatusCode != 200, "Endpoint allows empty request body");
+                Assert.AreNotEqual(200, (int)response.StatusCode, "Endpoint allows empty request body");
             }
             else
             {
-                Assert.IsTrue((int)response.StatusCode == 405, "Endpoint allows sending no request body");
+                Assert.AreEqual(405, (int)response.StatusCode, "Endpoint allows sending no request body");
             }
         }
     }

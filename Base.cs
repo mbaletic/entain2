@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace entain2
 {
@@ -16,25 +17,35 @@ namespace entain2
         public static HttpClient httpClient = null!;
         public static Client client = null!;
         public TestContext TestContext { get; set; }
-
+        protected Logger logger;
         [AssemblyInitialize]
         public static void Setup(TestContext context)
         {
-            var loggingHandler = new LoggingHandler(new HttpClientHandler());
-            httpClient = new HttpClient(loggingHandler);
+            httpClient = new HttpClient(new HttpClientHandler());
             client = new Client(httpClient)
             {
                 BaseUrl = ConfigManager.Settings.BaseUrl
             };
         }
-
         [TestInitialize]
         public void TestSetup()
         {
-            Logger.TestContext = TestContext;
-            Logger.Log($"Starting test: {TestContext.TestName}");
+            var logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+            if (!Directory.Exists(logsDirectory))
+            {
+                Directory.CreateDirectory(logsDirectory);
+            }
+            string fileName = $"{TestContext.TestName}-{Guid.NewGuid()}.txt";
+            string logFilePath = Path.Combine(logsDirectory, fileName);
+            logger = new Logger(logFilePath, TestContext);
+            var loggingHandler = new LoggingHandler(new HttpClientHandler(), logger);
+            httpClient = new HttpClient(loggingHandler);
+            client = new Client(httpClient)
+            {
+                BaseUrl = ConfigManager.Settings.BaseUrl
+            };
+            logger.Log($"Starting test: {TestContext.TestName}");
         }
-
         [TestCleanup]
         public async Task TestTeardown()
         {
@@ -43,17 +54,16 @@ namespace entain2
                 try
                 {
                     await client.DeletePetAsync(ConfigManager.Settings.ApiKey, petId);
-                    Logger.Log($"Deleted pet {petId}.");
+                    logger.Log($"Deleted pet {petId}.");
                 }
                 catch (ApiException e)
                 {
-                    Logger.Log($"Could not delete pet {petId}: {e.Message}");
+                    logger.Log($"Could not delete pet {petId}: {e.Message}");
                 }
             }
             PetHelper.generatedPetIds.Clear();
-            Logger.Log($"Ending test: {TestContext.TestName}");
+            logger.Log($"Ending test: {TestContext.TestName}");
         }
-
         [AssemblyCleanup]
         public static void SuiteTeardown()
         {
