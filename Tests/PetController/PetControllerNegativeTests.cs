@@ -52,7 +52,7 @@ namespace entain2.Tests.PetController
 
         [TestMethod]
         [TestCategory("Bugs")]
-        public async Task CreatePetWithoutPhotoUrls()
+        public async Task Should_ThrowException_When_CreatingPetWithoutPhotoUrls()
         {
             Pet petWithoutPhotoUrls = PetHelper.CreateValidPet();
             petWithoutPhotoUrls.PhotoUrls = null;
@@ -72,7 +72,7 @@ namespace entain2.Tests.PetController
         /// </summary>
         [TestMethod]
         [TestCategory("Bugs")]
-        public async Task TryCreatePetWithEmptyRequestBody()
+        public async Task Should_ReturnError_When_CreatingPetWithEmptyRequestBody()
         {
             var emptyBody = @"{
     }";
@@ -92,14 +92,14 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task TryCreatePetNoBody()
+        public async Task Should_ReturnError_When_CreatingPetWithNoBody()
         {
             var response = await RawJsonClient.PostPetAsync("");
             Assert.IsTrue((int)response.StatusCode == 405, "Endpoint allows sending no request body");
         }
 
         [TestMethod]
-        public async Task TryCreateEmptyPet()
+        public async Task Should_ThrowException_When_CreatingEmptyPet()
         {
             Pet emptyPet = new();
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>

@@ -113,7 +113,7 @@ namespace entain2.Tests.UserController
         /// </summary>
         [TestMethod]
         [TestCategory("Bugs")]
-        public async Task DeleteNonExistantUser()
+        public async Task Should_ThrowException_When_DeletingNonExistentUser()
         {
             User localUser = UserHelper.CreateValidUser();
             await Assert.ThrowsExceptionAsync<ApiException>(async () =>

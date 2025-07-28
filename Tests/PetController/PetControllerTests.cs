@@ -124,7 +124,7 @@ namespace entain2.Tests.PetController
         }
 
         [TestMethod]
-        public async Task FindByTags()
+        public async Task Should_ReturnPets_When_FindingByTags()
         {
             var response = await client.FindPetsByTagsAsync(["test"]);
             Assert.IsNotNull(response, "Find by tags operation returned nothing.");
